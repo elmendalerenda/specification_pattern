@@ -1,9 +1,7 @@
 require 'minitest/autorun'
 
 class SpecificationTest < Minitest::Test
-
-  def test_kk
-
+  def test_select_payrolls
     payroll = "1.000,00,00;EUR;01/03/2015;payroll march"
     another_payroll = "1.000,00;EUR;02/04/2015;payroll april"
     transaction = "15.00,00;EUR;12/03/2015;prepaid topup"
@@ -16,9 +14,10 @@ end
 
 class Account
   def initialize(statement)
+    @statement = statement
   end
 
   def payrolls
-    []
+    @statement.select {|e| !(e =~ /payroll/).nil? }
   end
 end
