@@ -1,4 +1,5 @@
 require 'minitest/autorun'
+require './account'
 
 class SpecificationTest < Minitest::Test
   def test_select_payrolls
@@ -8,16 +9,7 @@ class SpecificationTest < Minitest::Test
     statement = [payroll, another_payroll, transaction]
 
     selected_transactions = Account.new(statement).payrolls
+
     assert_equal([payroll, another_payroll], selected_transactions)
-  end
-end
-
-class Account
-  def initialize(statement)
-    @statement = statement
-  end
-
-  def payrolls
-    @statement.select {|e| !(e =~ /payroll/).nil? }
   end
 end
