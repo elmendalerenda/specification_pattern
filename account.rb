@@ -6,4 +6,7 @@ class Account
   def payrolls
     @statement.reject { |e| e !~ /payroll/ }
   end
+
+  def fees
+  end
 end

@@ -12,4 +12,15 @@ class SpecificationTest < Minitest::Test
 
     assert_equal([payroll, another_payroll], selected_transactions)
   end
+
+  def test_select_bank_fees
+    fees = "5,00,00;EUR;01/03/2015;fees march"
+    more_fees = "1.000,00;EUR;02/04/2015;fees april"
+    payroll = "15.00,00;EUR;12/03/2015;payroll topup"
+    statement = [fees, more_fees, payroll]
+
+    selected_transactions = Account.new(statement).fees
+
+    assert_equal([fees, more_fees], selected_transactions)
+  end
 end
