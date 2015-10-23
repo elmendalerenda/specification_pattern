@@ -8,5 +8,6 @@ class Account
   end
 
   def fees
+    @statement.reject { |e| e !~ /fees/ }
   end
 end
