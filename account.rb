@@ -4,10 +4,16 @@ class Account
   end
 
   def payrolls
-    @statement.reject { |e| e !~ /payroll/ }
+    select(/payroll/)
   end
 
   def fees
-    @statement.reject { |e| e !~ /fees/ }
+    select(/fees/)
+  end
+
+  private
+
+  def select(regex)
+    @statement.reject { |e| e !~ regex }
   end
 end
