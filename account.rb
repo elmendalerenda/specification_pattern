@@ -11,6 +11,9 @@ class Account
     select(/fees/)
   end
 
+  def cash_withdrawals
+  end
+
   private
 
   def select(regex)
