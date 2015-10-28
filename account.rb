@@ -12,6 +12,7 @@ class Account
   end
 
   def cash_withdrawals
+    select(/withdrawal/)
   end
 
   private
