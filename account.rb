@@ -4,20 +4,33 @@ class Account
   end
 
   def payrolls
-    select(/payroll/)
+    select_statements(/payroll/)
   end
 
   def fees
-    select(/fees/)
+    select_statements(/fees/)
   end
 
   def cash_withdrawals
-    select(/withdrawal/)
+    select_statements(/withdrawal/)
+  end
+
+  def select(spec)
+  end
+
+  class Payroll
+    def self.and(spec)
+
+    end
+  end
+
+  class Withdrawal
   end
 
   private
 
-  def select(regex)
+  def select_statements(regex)
     @statement.reject { |e| e !~ regex }
   end
+
 end
