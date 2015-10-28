@@ -1,4 +1,6 @@
 class Account
+  attr_reader :statement
+
   def initialize(statement)
     @statement = statement
   end
@@ -15,22 +17,34 @@ class Account
     select_statements(/withdrawal/)
   end
 
-  def select(spec)
+  def select(&spec)
+    spec.call(@statement)
   end
 
-  class Payroll
-    def self.and(spec)
+  class PayrollSpec
 
+    def and(other)
+      -> (statement) { to_proc.call(statement) + other.to_proc.call(statement) }
+    end
+
+    def to_proc
+      -> (statement) { statement.reject { |e| e !~ /payroll/ } }
     end
   end
 
-  class Withdrawal
+
+  class WithdrawalSpec
+    def to_proc
+      -> (statement) { statement.reject { |e| e !~ /withdrawal/ } }
+    end
   end
+
+  Payroll = PayrollSpec.new
+  Withdrawal = WithdrawalSpec.new
 
   private
 
   def select_statements(regex)
     @statement.reject { |e| e !~ regex }
   end
-
 end

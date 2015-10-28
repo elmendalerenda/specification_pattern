@@ -41,7 +41,7 @@ class SpecificationTest < Minitest::Test
     payroll = "1.000,00;EUR;12/03/2015;payroll march"
     statement = [fees, withdrawal, payroll]
 
-    selected_transactions = Account.new(statement).select(Account::Payroll.and(Account::Withdrawal))
+    selected_transactions = Account.new(statement).select(&Account::Payroll.and(Account::Withdrawal))
 
     assert_equal([payroll, withdrawal], selected_transactions)
   end
