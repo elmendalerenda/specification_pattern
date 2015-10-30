@@ -15,25 +15,25 @@ module AccountSpecs
     private
 
     def each_transaction(statement)
-      statement.reject { |transaction|  satisfied_by?(transaction) }
+      statement.select { |transaction| satisfied_by?(transaction) }
     end
   end
 
   class PayrollSpec < Spec
     def satisfied_by?(transaction)
-       transaction !~ /payroll/
+       transaction =~ /payroll/
     end
   end
 
   class WithdrawalSpec < Spec
     def satisfied_by?(transaction)
-       transaction !~ /withdrawal/
+       transaction =~ /withdrawal/
     end
   end
 
   class FeesSpec < Spec
     def satisfied_by?(transaction)
-       transaction !~ /fees/
+       transaction =~ /fees/
     end
   end
 end
