@@ -36,12 +36,22 @@ module AccountSpecs
        transaction[:information] =~ /fees/
     end
   end
+  class AmountGreaterThanSpec < Spec
+    def initialize(threshold)
+      @threshold = threshold
+    end
+
+    def satisfied_by?(transaction)
+       transaction[:amount] >= @threshold
+    end
+  end
 end
 
 class Account
   Payroll = AccountSpecs::PayrollSpec.new
   Withdrawal = AccountSpecs::WithdrawalSpec.new
   Fees = AccountSpecs::FeesSpec.new
+  AmountGreaterThan500 = AccountSpecs::AmountGreaterThanSpec.new(500.0)
 
   def initialize(statement)
     @statement = statement

@@ -45,4 +45,15 @@ class SpecificationTest < Minitest::Test
 
     assert_equal([payroll, withdrawal], selected_transactions)
   end
+
+  def test_select_amount_greater_than_500
+    withdrawal = { amount: 20.00, currency: 'EUR', date: '02/04/2015', information:'cash withdrawal' }
+    payroll = { amount: 1_000.00, currency: 'EUR', date: '12/03/2015', information:'payroll march' }
+    statement = [withdrawal, payroll]
+
+    selected_transactions = Account.new(statement).select(&Account::AmountGreaterThan500)
+
+    assert_equal([payroll], selected_transactions)
+  end
+
 end
