@@ -21,19 +21,19 @@ module AccountSpecs
 
   class PayrollSpec < Spec
     def satisfied_by?(transaction)
-       transaction =~ /payroll/
+      transaction[:information] =~ /payroll/
     end
   end
 
   class WithdrawalSpec < Spec
     def satisfied_by?(transaction)
-       transaction =~ /withdrawal/
+       transaction[:information] =~ /withdrawal/
     end
   end
 
   class FeesSpec < Spec
     def satisfied_by?(transaction)
-       transaction =~ /fees/
+       transaction[:information] =~ /fees/
     end
   end
 end

@@ -3,9 +3,9 @@ require './account'
 
 class SpecificationTest < Minitest::Test
   def test_select_payrolls
-    payroll = "1.000,00,00;EUR;01/03/2015;payroll march"
-    another_payroll = "1.000,00;EUR;02/04/2015;payroll april"
-    transaction = "15,00;EUR;12/03/2015;prepaid topup"
+    payroll = { amount: 1_000.00, currency: 'EUR', date: '12/03/2015', information:'payroll march' }
+    another_payroll = { amount: 1_000.00, currency: 'EUR', date: '12/04/2015', information:'payroll april' }
+    transaction = { amount: 15.00, currency: 'EUR', date: '12/03/2015', information:'prepaid topup' }
     statement = [payroll, another_payroll, transaction]
 
     selected_transactions = Account.new(statement).payrolls
@@ -14,9 +14,9 @@ class SpecificationTest < Minitest::Test
   end
 
   def test_select_bank_fees
-    fees = "5,00;EUR;01/03/2015;fees march"
-    more_fees = "1,00;EUR;02/04/2015;fees april"
-    payroll = "1.000,00;EUR;12/03/2015;payroll march"
+    fees = { amount: 5.00, currency: 'EUR', date: '01/03/2015', information:'fees march' }
+    more_fees = { amount: 1.00, currency: 'EUR', date: '02/04/2015', information:'fees april' }
+    payroll = { amount: 1_000.00, currency: 'EUR', date: '12/03/2015', information:'payroll march' }
     statement = [fees, more_fees, payroll]
 
     selected_transactions = Account.new(statement).fees
@@ -25,9 +25,9 @@ class SpecificationTest < Minitest::Test
   end
 
   def test_select_cash_withdrawal
-    fees = "5,00;EUR;01/03/2015;fees march"
-    withdrawal = "20,00;EUR;02/04/2015;cash withdrawal"
-    payroll = "1.000,00;EUR;12/03/2015;payroll march"
+    fees = { amount: 5.00, currency: 'EUR', date: '01/03/2015', information:'fees march' }
+    withdrawal = { amount: 20.00, currency: 'EUR', date: '02/04/2015', information:'cash withdrawal' }
+    payroll = { amount: 1_000.00, currency: 'EUR', date: '12/03/2015', information:'payroll march' }
     statement = [fees, withdrawal, payroll]
 
     selected_transactions = Account.new(statement).cash_withdrawals
@@ -36,9 +36,9 @@ class SpecificationTest < Minitest::Test
   end
 
   def test_select_payrolls_and_withdrawals
-    fees = "5,00;EUR;01/03/2015;fees march"
-    withdrawal = "20,00;EUR;02/04/2015;cash withdrawal"
-    payroll = "1.000,00;EUR;12/03/2015;payroll march"
+    fees = { amount: 5.00, currency: 'EUR', date: '01/03/2015', information:'fees march' }
+    withdrawal = { amount: 20.00, currency: 'EUR', date: '02/04/2015', information:'cash withdrawal' }
+    payroll = { amount: 1_000.00, currency: 'EUR', date: '12/03/2015', information:'payroll march' }
     statement = [fees, withdrawal, payroll]
 
     selected_transactions = Account.new(statement).select(&Account::Payroll.and(Account::Withdrawal))
