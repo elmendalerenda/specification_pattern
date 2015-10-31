@@ -4,6 +4,10 @@ module AccountSpecs
       -> (statement) { to_proc.call(statement) + other.to_proc.call(statement) }
     end
 
+    def and(other)
+
+    end
+
     def to_proc
       -> (statement) { each_transaction(statement) }
     end
