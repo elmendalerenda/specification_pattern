@@ -1,6 +1,6 @@
 module AccountSpecs
   class Spec
-    def and(other)
+    def or(other)
       -> (statement) { to_proc.call(statement) + other.to_proc.call(statement) }
     end
 

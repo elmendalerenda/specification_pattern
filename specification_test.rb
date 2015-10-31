@@ -35,13 +35,13 @@ class SpecificationTest < Minitest::Test
     assert_equal([withdrawal], selected_transactions)
   end
 
-  def test_select_payrolls_and_withdrawals
+  def test_select_payrolls_or_withdrawals
     fees = { amount: 5.00, currency: 'EUR', date: '01/03/2015', information:'fees march' }
     withdrawal = { amount: 20.00, currency: 'EUR', date: '02/04/2015', information:'cash withdrawal' }
     payroll = { amount: 1_000.00, currency: 'EUR', date: '12/03/2015', information:'payroll march' }
     statement = [fees, withdrawal, payroll]
 
-    selected_transactions = Account.new(statement).select(&Account::Payroll.and(Account::Withdrawal))
+    selected_transactions = Account.new(statement).select(&Account::Payroll.or(Account::Withdrawal))
 
     assert_equal([payroll, withdrawal], selected_transactions)
   end
