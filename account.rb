@@ -5,7 +5,22 @@ module AccountSpecs
     end
 
     def and(other)
+      -> (statement) {
 
+        f1 = to_proc.call(statement)
+        f2 = other.to_proc.call(statement)
+
+        dd = []
+        f1.each {|e|
+          f2.each{|i|
+            if(e[:information] == i[:information])
+              dd << i
+            end
+          }
+        }
+
+        dd
+        }
     end
 
     def to_proc

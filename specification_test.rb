@@ -51,7 +51,7 @@ class SpecificationTest < Minitest::Test
     payroll = { amount: 1_000.00, currency: 'EUR', date: '12/03/2015', information:'payroll march' }
     statement = [withdrawal, payroll]
 
-    selected_transactions = Account.new(statement).select(&Account::AmountGreaterThan500.and(&Account::Payroll))
+    selected_transactions = Account.new(statement).select(&Account::AmountGreaterThan500)
 
     assert_equal([payroll], selected_transactions)
   end
@@ -61,7 +61,7 @@ class SpecificationTest < Minitest::Test
     payroll = { amount: 1_000.00, currency: 'EUR', date: '12/03/2015', information:'payroll march' }
     statement = [withdrawal, payroll]
 
-    selected_transactions = Account.new(statement).select(&Account::AmountGreaterThan500)
+    selected_transactions = Account.new(statement).select(&Account::AmountGreaterThan500.and(Account::Payroll))
 
     assert_equal([payroll], selected_transactions)
   end
