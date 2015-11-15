@@ -5,22 +5,9 @@ module AccountSpecs
     end
 
     def and(other)
-      -> (statement) {
-
-        f1 = to_proc.call(statement)
-        f2 = other.to_proc.call(statement)
-
-        dd = []
-        f1.each {|e|
-          f2.each{|i|
-            if(e[:information] == i[:information])
-              dd << i
-            end
-          }
-        }
-
-        dd
-        }
+      -> (statement) do
+        uniq_transactions(to_proc.call(statement), other.to_proc.call(statement))
+      end
     end
 
     def to_proc
@@ -32,6 +19,14 @@ module AccountSpecs
     end
 
     private
+
+    def uniq_transactions(hash, other_hash)
+      hash.map do |i|
+        other_hash.find do |j|
+          i[:information] == j[:information]
+        end
+      end.compact
+    end
 
     def each_transaction(statement)
       statement.select { |transaction| satisfied_by?(transaction) }
