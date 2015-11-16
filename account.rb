@@ -1,36 +1,37 @@
 module AccountSpecs
   class Spec
     def or(other)
-      -> (statement) { to_proc.call(statement) + other.to_proc.call(statement) }
+        new_class = Class.new(Spec) do
+          attr_writer :one
+          attr_writer :two
+          def satisfied_by?(transaction)
+            @one.satisfied_by?(transaction) || @two.satisfied_by?(transaction)
+          end
+        end
+        ff = new_class.new
+        ff.one = self
+        ff.two = other
+        ff
     end
 
     def and(other)
-      -> (statement) do
-        uniq_transactions(to_proc.call(statement), other.to_proc.call(statement))
-      end
-    end
-
-    def to_proc
-      -> (statement) { each_transaction(statement) }
+        new_class = Class.new(Spec) do
+          attr_writer :one
+          attr_writer :two
+          def satisfied_by?(transaction)
+            @one.satisfied_by?(transaction) && @two.satisfied_by?(transaction)
+          end
+        end
+        ff = new_class.new
+        ff.one = self
+        ff.two = other
+        ff
     end
 
     def satisfied_by?(transaction)
        true
     end
 
-    private
-
-    def uniq_transactions(hash, other_hash)
-      hash.map do |i|
-        other_hash.find do |j|
-          i[:information] == j[:information]
-        end
-      end.compact
-    end
-
-    def each_transaction(statement)
-      statement.select { |transaction| satisfied_by?(transaction) }
-    end
   end
 
   class PayrollSpec < Spec
@@ -66,24 +67,25 @@ class Account
   Withdrawal = AccountSpecs::WithdrawalSpec.new
   Fees = AccountSpecs::FeesSpec.new
   AmountGreaterThan500 = AccountSpecs::AmountGreaterThanSpec.new(500.0)
+  AmountGreaterThan500AndPayroll = Account::AmountGreaterThan500.and(Account::Payroll)
 
   def initialize(statement)
     @statement = statement
   end
 
   def payrolls
-    select(&Payroll)
+    select(Payroll)
   end
 
   def fees
-    select(&Fees)
+    select(Fees)
   end
 
   def cash_withdrawals
-    select(&Withdrawal)
+    select(Withdrawal)
   end
 
-  def select(&spec)
-    spec.call(@statement)
+  def select(spec)
+    @statement.select { |e| spec.satisfied_by?(e) }
   end
 end
